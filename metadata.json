@@ -1,0 +1,6 @@
+{
+  "name": "Voxora AI – College Complaint Sorter",
+  "description": "AI-Powered College Complaint Sorter and Prioritizer for Sri Venkateswara College of Engineering, Tirupati.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta name="theme-color" content="#1e1b4b">
+  <title>Lodge a Grievance | Voxora AI – SVCE Tirupati</title>
+  <meta name="description" content="Submit student or faculty grievances for Sri Venkateswara College of Engineering. Instant AI category classification and priority evaluation.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .confirmation-card {
+      display: none;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .id-display {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #3730a3;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .duplicate-alert {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+    .error-banner {
+      display: none;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #be123c;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .success-toast {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #065f46;
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <!-- College Bar -->
+  <div class="college-bar">
+    <div>
+      <strong>Sri Venkateswara College of Engineering, Tirupati</strong> · Problem Statement ID: A4
+    </div>
+    <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+      <span>Helpline: <a href="tel:+918772288888">+91 877 228 8888</a></span>
+      <span>Email: <a href="mailto:grievances@svce.edu.in">grievances@svce.edu.in</a></span>
+      <span class="college-bar-badge">Team: RESLOVIX</span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand" title="Voxora AI Home">
+        <div class="brand-icon">VX</div>
+        <div class="brand-text">
+          <h1>VOXORA AI</h1>
+          <span>SVCE Tirupati Grievance Cell</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="submit.html" class="active">Submit Complaint</a></li>
+        <li><a href="dashboard.html">Admin Dashboard</a></li>
+        <li><a href="track.html">Track Complaint</a></li>
+        <li><a href="about.html">About Team</a></li>
+      </ul>
+      <button id="mobileMenuBtn" class="mobile-toggle" aria-label="Toggle Navigation Menu">
+        ☰
+      </button>
+    </div>
+    <!-- Mobile Menu Drawer -->
+    <div id="mobileMenu" class="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="submit.html">Submit Complaint</a>
+      <a href="dashboard.html">Admin Dashboard</a>
+      <a href="track.html">Track Complaint</a>
+      <a href="about.html">About Team</a>
+      <div style="padding-top: 0.75rem; font-size: 0.8rem; color: #64748b;">
+        <div>Helpline: <a href="tel:+918772288888" style="color: #4f46e5; text-decoration: underline;">+91 877 228 8888</a></div>
+        <div>Email: <a href="mailto:grievances@svce.edu.in" style="color: #4f46e5; text-decoration: underline;">grievances@svce.edu.in</a></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Container -->
+  <div class="container">
+    <h2 class="section-title">Lodge a College Complaint</h2>
+    <p class="section-desc">
+      Submit your grievance with accurate details. Voxora AI will scan keywords to classify the category, evaluate priority, and route it to the respective college department cell.
+    </p>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner" role="alert"></div>
+
+    <!-- Submission Form -->
+    <div id="formContainer" class="form-card">
+      <form id="complaintForm" novalidate>
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" class="form-control" placeholder="e.g. Kagathi Kiranmayee" required>
+        </div>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <div class="form-group" style="flex: 1; min-width: 160px;">
+            <label for="role">Role *</label>
+            <select id="role" class="form-control" required>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Staff">Staff</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1; min-width: 160px;">
+            <label for="departmentYear">Department / Year (Optional)</label>
+            <input type="text" id="departmentYear" class="form-control" placeholder="e.g. CSE - 3rd Year or ECE Dept">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">College or Contact Email *</label>
+          <input type="email" id="email" class="form-control" placeholder="student@svce.edu.in" required>
+        </div>
+
+        <div class="form-group">
+          <label for="title">Complaint Title / Summary *</label>
+          <input type="text" id="title" class="form-control" placeholder="e.g. Wi-Fi router not connecting in Block 2 Room 304" required>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Campus Location (Optional)</label>
+          <input type="text" id="location" class="form-control" placeholder="e.g. Block 2 3rd Floor, Godavari Hostel, or Bus Route 14">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Detailed Description *</label>
+          <textarea id="description" class="form-control" rows="4" placeholder="Detail the issue, equipment involved, frequency, and whether there is any safety hazard..." required></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+          Submit Grievance to College Cell
+        </button>
+      </form>
+    </div>
+
+    <!-- Confirmation Card -->
+    <div id="confirmationCard" class="confirmation-card">
+      <div style="text-align: center;">
+        <span style="font-size: 3rem;">✅</span>
+        <h3 style="font-size: 1.5rem; font-weight: 800; margin-top: 0.5rem; color: #1e1b4b;">
+          Complaint Registered Successfully
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">
+          Voxora AI has triaged and forwarded your grievance to the designated SVCE department.
+        </p>
+      </div>
+
+      <div class="id-display" id="resId">VX-2026-XXXX</div>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <button id="copyBtn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 1rem; color: #4338ca; border-color: #c7d2fe;">
+          📋 Copy Ticket ID
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Classified Category</span>
+          <div id="resCategory" style="font-weight: 800; color: #4338ca; font-size: 1.1rem; margin-top: 0.25rem;"></div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Assigned Priority</span>
+          <div id="resPriority" style="font-weight: 800; font-size: 1.1rem; margin-top: 0.25rem;"></div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Destination Department</span>
+          <div id="resDepartment" style="font-weight: 800; color: #1e293b; font-size: 0.9rem; margin-top: 0.25rem;"></div>
+        </div>
+      </div>
+
+      <div id="resDuplicateAlert" class="duplicate-alert" style="display: none;">
+        <strong>Notice:</strong> Possible duplicate complaint detected with existing ticket(s). The administrator will review both tickets together.
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap;">
+        <button onclick="location.reload()" class="btn btn-secondary" style="color: #334155; border: 1px solid #cbd5e1;">
+          Submit Another Grievance
+        </button>
+        <a id="trackLink" href="track.html" class="btn btn-primary">
+          Track Resolution Status
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="success-toast">Ticket ID copied to clipboard!</div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <a href="index.html" style="color: #ffffff; text-decoration: none; font-weight: 800; font-size: 1rem;">
+          VOXORA AI
+        </a>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">
+          Sri Venkateswara College of Engineering, Tirupati · Problem Statement A4
+        </div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">
+          Campus Helpline: <a href="tel:+918772288888" style="color: #60a5fa; text-decoration: underline;">+91 877 228 8888</a> · Email: <a href="mailto:grievances@svce.edu.in" style="color: #60a5fa; text-decoration: underline;">grievances@svce.edu.in</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="submit.html">Submit</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="track.html">Track</a>
+        <a href="about.html">About Team</a>
+        <a href="404.html">Custom 404</a>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 1.5rem auto 0; padding-top: 1rem; border-top: 1px solid #1e293b; text-align: center; font-size: 0.75rem; color: #64748b;">
+      &copy; 2026 Sri Venkateswara College of Engineering. All rights reserved. Team RESLOVIX.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/processor.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('mobileMenu');
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('open');
+      btn.innerText = menu.classList.contains('open') ? '✕' : '☰';
+    });
+
+    const form = document.getElementById('complaintForm');
+    const errorBanner = document.getElementById('errorBanner');
+    const toast = document.getElementById('toast');
+
+    function showToastMsg(msg) {
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.style.display = 'none';
+
+      const name = document.getElementById('name').value.trim();
+      const role = document.getElementById('role').value;
+      const email = document.getElementById('email').value.trim();
+      const departmentYear = document.getElementById('departmentYear').value.trim();
+      const title = document.getElementById('title').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const locationVal = document.getElementById('location').value.trim();
+
+      // Form validation with friendly error messages
+      if (!name) {
+        errorBanner.innerText = 'Please enter your full name.';
+        errorBanner.style.display = 'block';
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        errorBanner.innerText = 'Please provide a valid email address.';
+        errorBanner.style.display = 'block';
+        return;
+      }
+      if (!title || title.length < 5) {
+        errorBanner.innerText = 'Please enter a descriptive complaint title (minimum 5 characters).';
+        errorBanner.style.display = 'block';
+        return;
+      }
+      if (!description || description.length < 15) {
+        errorBanner.innerText = 'Please provide clear details in the description (minimum 15 characters).';
+        errorBanner.style.display = 'block';
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Processing with Voxora AI...';
+
+      try {
+        const existing = await window.voxoraDB.getComplaints();
+        const analysis = window.VoxoraProcessor.processComplaint(title, description, locationVal, existing);
+        const randomId = 'VX-2026-' + Math.floor(1000 + Math.random() * 9000);
+
+        const complaint = {
+          id: randomId,
+          name,
+          role,
+          email,
+          departmentYear: departmentYear || 'General',
+          title,
+          description,
+          location: locationVal || 'SVCE Campus',
+          category: analysis.category,
+          priority: analysis.priority,
+          department: analysis.department,
+          status: 'Pending',
+          possibleDuplicateOf: analysis.possibleDuplicates.map(d => d.id),
+          similarityScore: analysis.possibleDuplicates.length > 0 ? analysis.possibleDuplicates[0].similarity : 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        await window.voxoraDB.saveComplaint(complaint);
+
+        // Show confirmation
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('confirmationCard').style.display = 'block';
+
+        document.getElementById('resId').innerText = complaint.id;
+        document.getElementById('resCategory').innerText = complaint.category;
+
+        const priEl = document.getElementById('resPriority');
+        priEl.innerText = complaint.priority;
+        priEl.style.color = complaint.priority === 'High' ? 'var(--priority-high)' :
+                           complaint.priority === 'Medium' ? 'var(--priority-medium)' : 'var(--priority-low)';
+
+        document.getElementById('resDepartment').innerText = complaint.department;
+
+        if (complaint.possibleDuplicateOf.length > 0) {
+          const dupEl = document.getElementById('resDuplicateAlert');
+          dupEl.style.display = 'block';
+          dupEl.innerHTML = `<strong>Notice: Similar complaint detected on file</strong> (Matched IDs: ${complaint.possibleDuplicateOf.join(', ')}). Your submission has been saved and flagged for administrator consolidation.`;
+        }
+
+        document.getElementById('trackLink').href = `track.html?id=${complaint.id}`;
+        showToastMsg(`Complaint ${complaint.id} registered successfully!`);
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+          navigator.clipboard.writeText(complaint.id);
+          showToastMsg('Ticket ID copied to clipboard!');
+        });
+      } catch (err) {
+        console.error(err);
+        errorBanner.innerText = 'Error registering complaint. Please try again.';
+        errorBanner.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Submit Grievance to College Cell';
+      }
+    });
+  </script>
+</body>
+</html>
